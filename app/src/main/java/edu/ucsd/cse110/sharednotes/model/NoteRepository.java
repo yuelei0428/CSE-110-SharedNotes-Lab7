@@ -79,10 +79,12 @@ public class NoteRepository {
     // ==============
 
     public LiveData<Note> getRemote(String title) {
+        // TODO: Implement getRemote!
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void upsertRemote(Note note) {
+        // TODO: Implement upsersRemote!
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }
