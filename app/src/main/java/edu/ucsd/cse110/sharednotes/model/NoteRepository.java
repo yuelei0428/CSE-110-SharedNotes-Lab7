@@ -32,7 +32,7 @@ public class NoteRepository {
 
         Observer<Note> updateFromRemote = theirNote -> {
             var ourNote = note.getValue();
-            if (ourNote == null || ourNote.lastModified < theirNote.lastModified) {
+            if (ourNote == null || ourNote.updatedAt < theirNote.updatedAt) {
                 upsertLocal(theirNote);
             }
         };
@@ -63,7 +63,7 @@ public class NoteRepository {
     }
 
     public void upsertLocal(Note note) {
-        note.lastModified = System.currentTimeMillis();
+        note.updatedAt = System.currentTimeMillis();
         dao.upsert(note);
     }
 
