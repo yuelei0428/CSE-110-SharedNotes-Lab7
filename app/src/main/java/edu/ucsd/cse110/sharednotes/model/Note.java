@@ -6,14 +6,21 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.InputStreamReader;
+
 @Entity(tableName = "notes")
 public class Note {
     /** The title of the note. Used as the primary key for shared notes (even on the cloud). */
     @PrimaryKey
+    @SerializedName("title")
     @NonNull
     public String title;
 
     /** The content of the note. */
+    @SerializedName("content")
     @NonNull
     public String content;
 
@@ -22,11 +29,16 @@ public class Note {
      * Defaults to 0 (Jan 1, 1970), so that if a note already exists remotely, its content is
      * always preferred to a new empty note.
      */
-    public long lastModified = 0;
+    @SerializedName(value = "updated_at", alternate = "updatedAt")
+    public long updatedAt = 0;
 
     /** General constructor for a note. */
     public Note(@NonNull String title, @NonNull String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public static Note fromJSON(String json) {
+        return new Gson().fromJson(json, Note.class);
     }
 }
