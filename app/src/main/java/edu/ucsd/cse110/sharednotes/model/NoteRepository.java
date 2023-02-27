@@ -80,6 +80,8 @@ public class NoteRepository {
 
     public LiveData<Note> getRemote(String title) {
         // TODO: Implement getRemote!
+        // TODO: Set up polling background thread (MutableLiveData?)
+        // TODO: Refer to TimerService from https://github.com/DylanLukes/CSE-110-WI23-Demo5-V2.
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
