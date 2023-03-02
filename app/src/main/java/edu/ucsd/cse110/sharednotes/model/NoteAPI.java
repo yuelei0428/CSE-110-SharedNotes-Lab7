@@ -16,6 +16,8 @@ import okhttp3.Request;
 
 public class NoteAPI {
     // TODO: Implement the API using OkHttp!
+    // TODO: - getNote (maybe getNoteAsync)
+    // TODO: - putNote (don't need putNotAsync, probably)
     // TODO: Read the docs: https://square.github.io/okhttp/
     // TODO: Read the docs: https://sharednotes.goto.ucsd.edu/docs
 
