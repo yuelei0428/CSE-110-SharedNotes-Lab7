@@ -7,9 +7,11 @@ import androidx.lifecycle.Observer;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 public class NoteRepository {
     private final NoteDao dao;
+    private ScheduledFuture<?> poller; // what could this be for... hmm?
 
     public NoteRepository(NoteDao dao) {
         this.dao = dao;
@@ -84,6 +86,11 @@ public class NoteRepository {
         // TODO: Implement getRemote!
         // TODO: Set up polling background thread (MutableLiveData?)
         // TODO: Refer to TimerService from https://github.com/DylanLukes/CSE-110-WI23-Demo5-V2.
+
+        // Cancel any previous poller if it exists.
+        if (this.poller != null && !this.poller.isCancelled()) {
+            poller.cancel(true);
+        }
 
         // Set up a background thread that will poll the server every 3 seconds.
 
