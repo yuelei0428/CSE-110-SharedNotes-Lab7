@@ -16,7 +16,7 @@ public class NoteRepository {
     private final NoteDao dao;
     private ScheduledFuture<?> poller; // what could this be for... hmm?
 
-    public MutableLiveData<Note> noteData;
+    public MutableLiveData<Note> noteData = new MutableLiveData<>();
 
     public NoteRepository(NoteDao dao) {
         this.dao = dao;
