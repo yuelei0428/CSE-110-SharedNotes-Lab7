@@ -7,12 +7,15 @@ import androidx.annotation.MainThread;
 import androidx.annotation.WorkerThread;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class NoteAPI {
     // TODO: Implement the API using OkHttp!
@@ -22,6 +25,8 @@ public class NoteAPI {
     // TODO: Read the docs: https://sharednotes.goto.ucsd.edu/docs
 
     private volatile static NoteAPI instance = null;
+
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private OkHttpClient client;
 
@@ -72,5 +77,48 @@ public class NoteAPI {
 
         // We can use future.get(1, SECONDS) to wait for the result.
         return future;
+    }
+
+    @WorkerThread
+    public Note getNote(String title){
+        String encodedTitle = title.replace(" ", "%20");
+
+        var request = new Request.Builder()
+                .url("https://sharednotes.goto.ucsd.edu/notes/" + encodedTitle)
+                .method("GET", null)
+                .build();
+
+        try (var response = client.newCall(request).execute()) {
+            assert response.body() != null;
+            var body = response.body().string();
+            Log.i("GET", body);
+            return Note.fromJSON(body);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @WorkerThread
+    public void putNote(Note note){
+        JsonObject json = new JsonObject();
+        json.addProperty("version", note.version);
+        json.addProperty("content", note.content);
+        RequestBody msg = RequestBody.create(json.toString(), JSON);
+
+        var request = new Request.Builder()
+                .url("https://sharednotes.goto.ucsd.edu/notes/" + note.title)
+                .method("PUT", msg)
+                .build();
+
+        try (var response = client.newCall(request).execute()) {
+            assert response.body() != null;
+            var body = response.body().string();
+            Log.i("PUT", body);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
